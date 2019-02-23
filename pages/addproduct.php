@@ -13,8 +13,8 @@
             <input type="text" class="form-control" name="brand"  placeholder="Enter Brand name" required>
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Serial number:</label>
-            <input type="text" class="form-control" name="serial"  placeholder="Enter serial number" required>
+            <label for="exampleInputPassword1">Product number:</label>
+            <input type="text" class="form-control" name="serial"  placeholder="Enter product number" required>
         </div>
         <div class="form-group">
             <label for="exampleInputEmail1">Select size: </label>

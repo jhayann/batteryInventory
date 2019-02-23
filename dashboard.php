@@ -75,6 +75,16 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "purchase_failed")
     <!-- Custom styles for this template-->
     <link href="assets/css/sb-admin.css" rel="stylesheet">
        <script src="vendor/jquery/jquery.min.js"></script>
+       <script src="assets/js/bootstrap.bundle.min.js"></script>
+       <script src="js/popper.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+     <script src="vendor/chart.js/Chart.min.js"></script>
+	 <script src="vendor/sweetalert/sweetalert.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="assets/js/sb-admin.min.js"></script>
+  
 	<style>
 	.list-group-item
 	{
@@ -425,15 +435,66 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "purchase_failed")
 </div>
 
     <!-- Bootstrap core JavaScript-->
- 
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-     <script src="vendor/chart.js/Chart.min.js"></script>
-	 <script src="vendor/sweetalert/sweetalert.min.js"></script>
-    <!-- Custom scripts for all pages-->
-    <script src="assets/js/sb-admin.min.js"></script>
+ <script>
+         //bar chart
+	var ctx1 = document.getElementById( "barChartE" );
+        var ctx2 = document.getElementById( "barChartW" );
+        
+            $.ajax({
+                  url:"brain/controller.php",
+                    method:"POST",
+                    data:{request:"stockCondition"},
+                    success: function(data){
+                        
+                        var desc = [];
+			             var q = [];
+                        var e = $.parseJSON(data);
+                        for(var i = 0; i < e.length; i++) {       
+                           
+                            desc.push(e[i].description);
+                           q.push(e[i].quantity);
+                        }
+                          function getMax(q){
+                return Math.max.apply(null, q);
+                }
+                var tts =getMax(q) +100;
+	//    ctx.height = 200;
+	var myChart = new Chart( ctx1, {
+		type: 'bar',
+		data: {
+			labels: desc,
+			datasets: [
+				{
+					label: "Stocks Condition",
+					data: q,
+					borderColor: "rgba(237, 230, 94, 0.9)",
+					borderWidth: "0",
+					backgroundColor: "rgba(58, 209, 96, 0.5)"
+                }]
+		},
+		options: {
+			scales: {
+				yAxes: [ {
+					ticks: {
+						beginAtZero: true,
+                        max: tts
+					}
+                                } ]
+			}
+		}
+	} );
+                        
+                },
+                error: function(e)
+                {
+                    alert(e);
+                } // success
+            }); //ajax
+  
+    
+   
+ </script>
+    
   </body>
 
 </html>

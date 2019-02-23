@@ -10,8 +10,8 @@ $_SESSION['tcode'] = round(microtime(true));
            
             <div class="row">
                 <div class="col-sm-9">
-                    <label for="exampleInputPassword1">Serial number:</label>
-                    <input type="text" class="form-control" name="serial" id="serial" placeholder="Enter Serial number" autocomplete="off"  require>
+                    <label for="exampleInputPassword1">Product number:</label>
+                    <input type="text" class="form-control" name="serial" id="serial" placeholder="Enter product number" autocomplete="off"  require>
                 </div>
                 <div class="col-sm-3">
                     <label for="exampleInputPassword1">Quantity:</label>

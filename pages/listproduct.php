@@ -1,4 +1,10 @@
 <div class="breadcrumb">PRODUCTS</div>
+<div class="card c1">
+        <h5 class="card-header">Stocks Current Conditions</h5>
+        <div class="card-body">
+            <canvas id="barChartE" width="1394" height="300"></canvas>
+        </div>
+    </div>
 <table class="table table-striped">
         <thead>
             <th>Description</th>

@@ -154,4 +154,9 @@ else if(isset($_POST['request']) && $_POST['request'] == 'delitem')
     $id= $_POST['id'];
     delitem($id);
 }
+else if(isset($_POST['request']) && $_POST['request'] == 'stockCondition')
+{
+    
+    stocksCondition();
+}
 ?>
