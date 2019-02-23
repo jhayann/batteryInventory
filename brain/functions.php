@@ -5,7 +5,7 @@ include('config.php');
 
 function login($username,$password)
 {
-    $stmt = $GLOBALS['con']->prepare("SELECT username,password FROM users_ WHERE username = ? AND password = ? LIMIT 1") OR die ($GLOBALS['con']->error);
+    $stmt = $GLOBALS['con']->prepare("SELECT username,password FROM users WHERE username = ? AND password = ? LIMIT 1");
     $stmt->bind_param("ss",$username,$password);
     $stmt->execute();
     $count = $stmt->get_result()->num_rows;
@@ -168,7 +168,7 @@ function countProducts()
 
 function countUsers() 
 {
-    $stmt = $GLOBALS['con']->prepare("SELECT * FROM users_");
+    $stmt = $GLOBALS['con']->prepare("SELECT * FROM users");
         $stmt->execute();
     $count = $stmt->get_result()->num_rows;
     echo $count;
@@ -303,9 +303,7 @@ function purchaseItems($cfname,$cmobile,$transact_code)
         $st->bind_param("ssssd",$transact_code,$cfname,$cmobile,$json,$grandtotal)OR die( $st->error);
         if($st->execute())
         {
-            $message = "Hello " .$cfname." Your purchase is complete. with transaction code: " .$transact_code;
-
-           sms($message,$cmobile,"109631");
+           
             return true;
    
         } else 
@@ -355,36 +353,4 @@ function delitem($id)
     $stmt->bind_param("i",$id);
             $stmt->execute();
 }
-
- function sms($msg,$number,$deviceid)
-    {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => "https://smsgateway.me/api/v4/message/send",
-          CURLOPT_SSL_VERIFYPEER=>false,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 30,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => "[{\"phone_number\": \"$number\", \"message\": \"$msg\", \"device_id\": $deviceid}]",
-          CURLOPT_HTTPHEADER => array(
-            "Cache-Control: no-cache",
-            "Postman-Token: 0dfb5acc-f0ae-415b-a5d3-ca12a2dfdfd3",
-            "authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhZG1pbiIsImlhdCI6MTU1MDkzNzg4NCwiZXhwIjo0MTAyNDQ0ODAwLCJ1aWQiOjY4NDA1LCJyb2xlcyI6WyJST0xFX1VTRVIiXX0.vE6Fe6eCNl5haiISuIB6XiAZ-LwXGQ3M0W2TZ8gYJRU"
-          ),
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
-
-        if ($err) {
-          echo "cURL Error #:" . $err;
-        } else {
-          echo $response;
-        }
-    }
 ?>
