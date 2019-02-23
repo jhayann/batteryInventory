@@ -1,7 +1,11 @@
 <?php
+/*
 
+jielo
+*/
 
-session_destroy();
+sssession_destroy();
 
  header('location:index.php');
+
 ?>
