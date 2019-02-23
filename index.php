@@ -56,7 +56,7 @@ if(isset($_GET['notice']) && $_GET['notice'] == "login_error")
           <li class="nav-item active">
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li>
-              <!--  <li class="nav-item">
+              <li class="nav-item">
             <a href="register.php" class="nav-link" href="#">Sign up</a>
           </li>
     <li class="nav-item">
