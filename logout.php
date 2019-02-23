@@ -1,8 +1,5 @@
 <?php
-/*
 
-jielo
-*/
 
 sssession_destroy();
 
