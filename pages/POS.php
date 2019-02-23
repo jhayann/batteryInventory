@@ -89,7 +89,7 @@ $(document).ready(function(){
             $('#serial').val('');
                 getCart($('#tcode').val());
             }
-        });
+        }); // eto po ung error
         
 });
 $('#serial').keyup(function(e){
