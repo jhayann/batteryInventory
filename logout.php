@@ -1,8 +1,8 @@
 <?php
 
 
-sssession_destroy();
+session_destroy();
 
- header('location:controller.php');
+ header('location:index.php');
 
 ?>
