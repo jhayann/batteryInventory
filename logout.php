@@ -3,6 +3,6 @@
 
 sssession_destroy();
 
- header('location:index.php');
+ header('location:controller.php');
 
 ?>
