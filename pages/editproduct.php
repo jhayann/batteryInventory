@@ -1,7 +1,9 @@
 <?php
-  $stmt = $con->prepare("SELECT * FROM product");
-        $stmt->execute();
-        $result = $stmt->get_result();
+$id = $_GET['id'];
+  $ulam = $con->prepare("SELECT * FROM product where id = ?");
+  $ulam->bind_param("i",$id);
+        $ulam->execute();
+        $result = $ulam->get_result();
       $data = "";
         $r=$result->fetch_assoc();
 
