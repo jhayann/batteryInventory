@@ -4,7 +4,7 @@
        <input type="hidden" value="addproduct" name="request">
          <div id="response"></div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Description</label>
+            <label for="exampleInputPassword1">Description:</label>
             <input type="text" class="form-control" name="description" placeholder="Enter Description" autocomplete="off" require>
             
         </div>
@@ -35,7 +35,7 @@
                </select>
         </div>
            <div class="form-group">
-            <label for="quantity">Quantity</label>
+            <label for="quantity">Quantity:</label>
             <input type="number" class="form-control" name="quantity" placeholder="Enter quantity">
         </div>
         <div class="form-group">

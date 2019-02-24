@@ -12,7 +12,11 @@
 <table class="table">
     <thead>
         <th colspan="4">ORDER FORM</th>
-        <th><button class="btn btn-info float-right"  onclick="printContent('form_order');">PRINT</button></th>
+        <th>
+        <!-- My Enhancement.. Print the order  -->
+        <button class="btn btn-info float-right"  onclick="printContent('form_order');">PRINT</button>
+        
+        </th>
     </thead>
     <tr>
         <td colspan="4">Supplier: <?= $r['supplier'] ?></td>
