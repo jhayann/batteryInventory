@@ -5,7 +5,7 @@
          <div id="response"></div>
         <div class="form-group">
             <label for="exampleInputPassword1">COMPANY NAME:</label>
-            <input type="text" class="form-control" name="name" placeholder="Enter company name" autocomplete="off" require>
+            <input type="text" class="form-control" name="name" placeholder="Enter company name" autocomplete="off" required>
             
         </div>
         <div class="form-group">
@@ -14,7 +14,7 @@
         </div>
            <div class="form-group">
             <label for="quantity">BRAND ADVERTISE:</label>
-            <input type="text" class="form-control" name="brand" placeholder="Enter brand advertise">
+            <input type="text" class="form-control" name="brand" placeholder="Enter brand advertise" required>
         </div>
         <button type="submit" class="btn btn-primary btn-block">SAVE</button>
     </form>

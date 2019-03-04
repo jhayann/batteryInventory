@@ -1,5 +1,5 @@
     <div class="container" style="margin:auto;width:60%">
-       <div class="breadcrumb">ADD USER</div>
+       <div class="breadcrumb">ADD STAFF</div>
         <form method="POST" action="brain/controller.php">
            <input type="hidden" name="request" value="addprofile">
             <div class="form-group row">
@@ -19,31 +19,31 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputPassword" class="col-sm-3 col-form-label">Firstname</label>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Firstname:</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control"  name="fname"  required>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputPassword" class="col-sm-3 col-form-label">Middlename</label>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Middlename:</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control"  name="mname"  required>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputPassword" class="col-sm-3 col-form-label">Lastname</label>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Lastname:</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" name="lname"  required>
                 </div>
             </div>
               <div class="form-group row">
-                <label for="inputPassword" class="col-sm-3 col-form-label">Email</label>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Email:</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" name="email"  required>
                 </div>
             </div>
               <div class="form-group row">
-                <label for="inputPassword" class="col-sm-3 col-form-label">Mobile</label>
+                <label for="inputPassword" class="col-sm-3 col-form-label">Mobile:</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control"  name="mobile"  required>
                 </div>

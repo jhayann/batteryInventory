@@ -2,15 +2,10 @@
 
 
 <!-- My Enhancement Stock Level Condition .. -->
-<div class="card c1">
-        <h5 class="card-header">Stocks Current Conditions</h5>
-        <div class="card-body">
-            <canvas id="barChartE" width="1394" height="300"></canvas>
-        </div>
-    </div>
 
 
-<table class="table table-striped">
+
+<table class="table table-striped" id="tbproducts">
         <thead>
             <th>Description</th>
               <th>Brand</th>
@@ -23,7 +18,18 @@
         </thead>
     <tbody>
         <?php 
-        
+        checkStock();
         productList() ?>
     </tbody>
 </table>
+
+<script>
+$(document).ready(function(){
+        $('#tbproducts').DataTable({
+        dom: 'Bfrtip',
+         buttons: [
+        'excel', 'print'
+    ]
+    });
+});
+</script>
