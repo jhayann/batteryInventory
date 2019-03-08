@@ -2,6 +2,22 @@
 session_start();
 include('brain/config.php');
 include('brain/functions.php');
+
+/* include hashids lib */
+
+
+/* create the class object with minimum hashid length of 8 
+$hashids = new Hashids\Hashids('this is my salt', 8);
+/* encode several numbers into one id (length of id is going to be at least 8) 
+$id = $hashids->encode(1337);
+/* decode the same id 
+$numbers = $hashids->decode($id);
+/* `$numbers` is always an array 
+var_dump($id, $numbers);
+exit;
+*/
+$key = $_SESSION['username'];
+$meta = $_SESSION;
 if(!isset($_SESSION['username']))
 {
     header('location:index.php');
@@ -13,6 +29,7 @@ if(isset($_GET['logout']))
 }
 $disp= "d-none";
 $notice ="";
+
 if(isset($_GET['notice']) && $_GET['notice'] == "product_saved")
 {
     $disp = "success";
@@ -22,6 +39,11 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "product_updated")
 {
     $disp = "success";
     $notice = "The product you added has been updated";
+}
+else if(isset($_GET['notice']) && $_GET['notice'] == "product_deleted")
+{
+    $disp = "success";
+    $notice = "The product has been deleted";
 }
 else if(isset($_GET['notice']) && $_GET['notice'] == "supplier_added")
 {
@@ -69,18 +91,46 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "purchase_failed")
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
     <!-- Page level plugin CSS-->
-    <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    
 	<link href="vendor/sweetalert/sweetalert.css" rel="stylesheet">
-
+    <link href="datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <!-- Custom styles for this template-->
+      <link href="datatables//buttons.bootstrap.min.css" rel="stylesheet">
+      <link href="datatables/buttons.dataTables.min.css" rel="stylesheet">
+         
     <link href="assets/css/sb-admin.css" rel="stylesheet">
        <script src="vendor/jquery/jquery.min.js"></script>
+       <script src="assets/js/bootstrap.bundle.min.js"></script>
+       <script src="js/popper.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+     <script src="vendor/chart.js/Chart.min.js"></script>
+	 <script src="vendor/sweetalert/sweetalert.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="assets/js/sb-admin.min.js"></script>
+          <script src="datatables/jquery.dataTables.min.js"></script>
+      <script src="datatables/dataTables.bootstrap4.min.js"></script>
+      
+         <script src="js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="js/lib/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+
+    <script src="js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+  
 	<style>
 	.list-group-item
 	{
 		color:forestgreen;
 	}
         
+        #notice{
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
 	</style>
   </head>
 
@@ -98,10 +148,10 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "purchase_failed")
 
       <!-- Navbar -->
       <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
-     <!--   <li class="nav-item dropdown no-arrow mx-1">
-          <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+       <li class="nav-item dropdown no-arrow mx-1">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="modal" data-target="#modal-notification">
             <i class="fas fa-bell fa-fw" style="color:white"></i>
-            <span class="badge badge-danger">9+</span>
+            <span class="badge badge-danger badge-notif"></span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
             <a class="dropdown-item" href="#">Action</a>
@@ -109,7 +159,7 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "purchase_failed")
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Something else here</a>
           </div>
-        </li> -->
+        </li> 
        
         <li class="nav-item dropdown no-arrow">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -129,82 +179,43 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "purchase_failed")
     <div id="wrapper">
 <!-- Sidebar -->
 <ul class="sidebar navbar-nav">
-    <li class="list-group-item sidebar-separator-title text-muted align-items-center menu-collapsed d-flex">
-        <small>MAIN MENU</small>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link bg-dark" href="dashboard.php">
-            <i class="fas fa-fw fa-tachometer-alt mr-3"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle bg-dark list-group-item" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="fa fa-tasks fa-fw mr-3"></span>
-            <span>PRODUCTS</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 52px, 0px);">
-            <h6 class="dropdown-header">OPTION:</h6>
-            <a class="dropdown-item" href="?page=addproduct" id="">Add product</a>
-            <a class="dropdown-item" href="?page=listproduct">Manage Product</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle bg-dark list-group-item" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="fa fa-credit-card fa-fw mr-3"></span>
-            <span>SUPPLIER</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 52px, 0px);">
-            <h6 class="dropdown-header">Supplier option:</h6>
-           <!-- <a class="dropdown-item" href="?page=addsupplier" data-toggle="modal" data-target="#addcredit">Add supplier</a> -->
-           <a class="dropdown-item" href="?page=addsupplier">Add supplier</a>
-            <a class="dropdown-item" href="?page=listsupplier">Manage supplier</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle bg-dark list-group-item" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="fa fa-shopping-cart fa-fw mr-3"></span>
-            <span>ORDER</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 52px, 0px);">
-            <h6 class="dropdown-header">Order option:</h6>
-           <a class="dropdown-item" href="?page=neworder">New order</a>
-            <a class="dropdown-item" href="?page=listorder">Order list</a>
-        </div>
-    </li>
-
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle bg-dark list-group-item" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="fa fa-user fa-fw mr-3"></span>
-            <span>Manage Accounts</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 52px, 0px);">
-            <h6 class="dropdown-header">Users Option:</h6>
-            <a class="dropdown-item" href="?page=user_list">USERS LIST</a>
-            <a class="dropdown-item" href="?page=add_user">Add user</a>
-
-        </div>
-    </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle bg-dark list-group-item" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="fa fa-chart-line fa-fw mr-3"></span>
-            <span>Point of Sales</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(5px, 52px, 0px);">
-            <h6 class="dropdown-header">POS Option:</h6>
-            <a class="dropdown-item" href="?page=pos">POS </a>
-            <a class="dropdown-item" href="?page=transaction">Purchases</a>
-
-        </div>
-    </li>
-   <!-- <li class="nav-item">
-        <a class="nav-link bg-dark list-group-item" href="?page=logs">
-            <i class="fas fa-fw fa-envelope mr-3"></i>
-            <span>Logs</span>
-
-        </a>
-    </li> -->
+    <?php 
+        if($_SESSION['role'] == "admin")
+        {
+            $page = "admin";
+            include'inc/'.$page.'_menu.php';
+        } else {
+            $page = "staff";
+            include'inc/'.$page.'_menu.php';
+        }
+    
+    
+    ?>
 </ul>
+
+<div class="modal" id="modal-notification" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">SYSTEM NOTIFICATION</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="max-height:300px;overflow-y: scroll">
+      <div class="notification-body">
+          </div>  
+           
+      </div>
+      <div class="modal-footer">
+        
+
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
       <div id="content-wrapper">
 
@@ -213,103 +224,47 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "purchase_failed")
           <!-- Breadcrumbs-->
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <a href="dashboard2.php">Dashboard</a>
+              <a href="dashboard.php"><?= isset($_GET['page']) ? _crypt($_GET['page'],'d') : "ANALYTICS" ?></a>
               
             </li>
           </ol>
 
-          <div class="row">
-                    <div class="col-md-6">
-                        <div class="card p-30">
-                            <div class="media">
-                                <div class="media-left meida media-middle">
-                                    <span><i class="fa fa-shopping-cart  f-s-40 color-primary"></i></span>
-                                </div>&nbsp;
-                                <div class="media-body media-text-right">
-                                    <h2><?php   countProducts()  ?></h2>
-                                    <p class="m-b-0">PRODUCTS</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-           
-                    <div class="col-md-6">
-                        <div class="card p-30">
-                            <div class="media">
-                                <div class="media-left meida media-middle">
-                                    <span><i class="fa fa-user f-s-40 color-danger"></i></span>
-                                </div>&nbsp;
-                                <div class="media-body media-text-right">
-                                    <h2><?php  
-    
-    countUsers() ?></h2>
-                                    <p class="m-b-0">USERS</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+   
     
           <!-- Page Content -->
                       <div class="notifier"></div>
-					  <br>
+					  
            <div class="" id="main_panel">
                <div class="container" style="margin:auto;width:50%;">
-                   <div class="alert alert-<?=$disp?>"><?=$notice?> </div>
+                   <div class="alert alert-<?=$disp?>" id="notice"><?=$notice?> </div>
                </div>
                 <?php 
-                        if(isset($_GET['page']) && $_GET['page'] == "addproduct")
+                
+                    if(isset($_GET['page']))
                         {
-                            include('pages/addproduct.php');
+                       
+                        $page = _crypt(urldecode($_GET['page']),'d');
+                       
+                         $dir = 'pages/'.$page.'.php';
+                       
+                            if(is_readable($dir)){
+                                try{
+                                  require_once ("./$dir");
+                                }catch(Exception $e){
+                                      //
+                                }
+                            } else {
+                                include('pages/404.php');
+                            }
+                        
                         }
-                        else if(isset($_GET['page']) && $_GET['page'] == "listproduct")
+                        else
                         {
-                            include('pages/listproduct.php');
+                            include('pages/reports.php');
+                        
                         }
-                        else if(isset($_GET['page']) && $_GET['page'] == "editproduct")
-                        {
-                            include('pages/editproduct.php');
-                        }
-                        else if(isset($_GET['page']) && $_GET['page'] == "addsupplier")
-                        {
-                            include('pages/addsupplier.php');
-                        }
-                        else if(isset($_GET['page']) && $_GET['page'] == "listsupplier")
-                        {
-                            include('pages/listsupplier.php');
-                        }
-                        else if(isset($_GET['page']) && $_GET['page'] == "editsupplier")
-                        {
-                            include('pages/editsupplier.php');
-                        }
-                        else if(isset($_GET['page']) && $_GET['page'] == "neworder")
-                        {
-                            include('pages/neworder.php');
-                        }
-                        else if(isset($_GET['page']) && $_GET['page'] == "listorder")
-                        {
-                            include('pages/listorder.php');
-                        }
-                        else if(isset($_GET['page']) && $_GET['page'] == "editorder")
-                        {
-                            include('pages/editorder.php');
-                        }
-                        else if(isset($_GET['page']) && $_GET['page'] == "add_user")
-                        {
-                            include('pages/adduser.php');
-                        }
-                        else if(isset($_GET['page']) && $_GET['page'] == "user_list")
-                        {
-                            include('pages/userlist.php');
-                        }
-                        else if(isset($_GET['page']) && $_GET['page'] == "pos")
-                        {
-                            include('pages/POS.php');
-                        }
-                        else if(isset($_GET['page']) && $_GET['page'] == "transaction")
-                        {
-                            include('pages/listpurchases.php');
-                        }
+        
+
                 ?>
             </div>
         </div>
@@ -425,15 +380,62 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "purchase_failed")
 </div>
 
     <!-- Bootstrap core JavaScript-->
- 
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
+ <script>
+   
+  
+$('#modal-notification').on('shown.bs.modal', function (e) {
+    getNotif();
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-     <script src="vendor/chart.js/Chart.min.js"></script>
-	 <script src="vendor/sweetalert/sweetalert.min.js"></script>
-    <!-- Custom scripts for all pages-->
-    <script src="assets/js/sb-admin.min.js"></script>
+});
+
+function getNotif()
+{
+    $.ajax({
+     method:"post",
+     url:"brain/controller.php",
+     data: {request:'notif'},
+     success: function(data)
+     {
+         $('.notification-body').html(data);
+     }
+
+ }); 
+}
+function delNotif(e)
+{
+    $.ajax({
+     method:"post",
+     url:"brain/controller.php",
+     data: {request:'delnotif',id:e},
+     success: function(data)
+     {
+        getNotif();
+        countNotif();
+     }
+
+ });
+}
+
+function countNotif()
+{  
+    $.ajax({
+     method:"post",
+     url:"brain/controller.php",
+     data: {request:'countnotif'},
+     success: function(data)
+     {
+         $('.badge-notif').html(data);
+     }
+
+ }); 
+}
+
+$(document).ready(function(){
+    countNotif();
+});
+   
+ </script>
+    
   </body>
 
 </html>

@@ -8,6 +8,8 @@ if(isset($_POST['request']) && $_POST['request'] == 'login')
     {
         session_start();
         $_SESSION['username'] = $username;
+        $alt_key = "@!$#@^#&";
+        $_SESSION['token_key'] = md5($alt_key.$password);
         header('location:../dashboard.php');
     } 
     else 
@@ -27,7 +29,7 @@ else if(isset($_POST['request']) && $_POST['request'] == 'addproduct')
     $serial = $_POST['serial'];
     if(addProduct($description,$brand,$serial,$size,$voltage,$quantity,$price)==true)
     {
-        header('location:../dashboard.php?page=addproduct&notice=product_saved');
+        header('location:../dashboard.php?page='._crypt('addproduct').'&notice=product_saved');
     }
 }
 else if(isset($_POST['request']) && $_POST['request'] == 'updateproduct')
@@ -39,11 +41,29 @@ else if(isset($_POST['request']) && $_POST['request'] == 'updateproduct')
     $voltage = $_POST['voltage'];
     $quantity = $_POST['quantity'];
     $price = $_POST['price'];
-    $id = $_POST['id'];
+    $id = _crypt($_POST['id'],'d');
+    
       $serial = $_POST['serial'];
     if(updateProduct($description,$brand,$serial,$size,$voltage,$quantity,$price,$id)==true)
     {
-        header('location:../dashboard.php?page=listproduct&notice=product_updated');
+        $page = _crypt('listproduct');
+        
+        header('location:../dashboard.php?page='.$page.'&notice=product_updated');
+    }
+}
+else if(isset($_POST['request']) && $_POST['request'] == 'deleteproduct')
+{
+   
+    $id = _crypt($_POST['id'],'d');
+    
+      $page = _crypt('listproduct');
+    if(deleteProduct($id)==true)
+    {
+        header('location:../dashboard.php?page='.$page.'&notice=product_deleted');
+    } 
+    else
+    {
+         header('location:../dashboard.php?page='.$page.'&notice=product_deleted_failed');
     }
 }
 else if(isset($_POST['request']) && $_POST['request'] == 'addsupplier')
@@ -54,7 +74,7 @@ else if(isset($_POST['request']) && $_POST['request'] == 'addsupplier')
     
     if(addSupplier($name,$address,$brand)==true)
     {
-       header('location:../dashboard.php?page=addsupplier&notice=supplier_added');  
+       header('location:../dashboard.php?page='._crypt('addsupplier').'&notice=supplier_added');  
     }
     
 }
@@ -65,10 +85,10 @@ else if(isset($_POST['request']) && $_POST['request'] == 'updatesupplier')
     $name = $_POST['name'];
     $brand = $_POST['brand'];
     $address = $_POST['address'];
-    $id = $_POST['id'];
+    $id = _crypt($_POST['id'],'d');
     if(updateSupplier($name,$address,$brand,$id)==true)
     {
-        header('location:../dashboard.php?page=listsupplier&notice=supplier_updated');
+        header('location:../dashboard.php?page='._crypt('listsupplier').'&notice=supplier_updated');
     }
 }
 else if(isset($_POST['request']) && $_POST['request'] == 'neworder')
@@ -83,7 +103,7 @@ else if(isset($_POST['request']) && $_POST['request'] == 'neworder')
     $price = $_POST['price'];
     if(newOrder($orderno,$supplier,$description,$brand,$size,$voltage,$quantity)==true)
     {
-        header('location:../dashboard.php?page=listorder&notice=order_submitted');
+        header('location:../dashboard.php?page='._crypt('listorder').'&notice=order_submitted');
     }
 }
 else if(isset($_POST['request']) && $_POST['request'] == 'updateprofile')
@@ -116,7 +136,7 @@ else if(isset($_POST['request']) && $_POST['request'] == 'addprofile')
  if(addprofile($username, $password, $fname, $mname, $lname, $email, $mobile)==true)
  {
      
-       header('location:../dashboard.php?page=listprofile&notice=profile_updated');
+       header('location:../dashboard.php?page='._crypt('listprofile').'&notice=profile_updated');
      
  }
 }
@@ -143,7 +163,7 @@ else if(isset($_POST['request']) && $_POST['request'] == 'purchase')
    {
           session_start();
    $_SESSION['tcode'] = round(microtime(true));
-          header('location:../dashboard.php?page=transaction&notice=purchase_complete');
+          header('location:../dashboard.php?page='._crypt('listpurchases').'&notice=purchase_complete');
    } else 
    {
          header('location:../dashboard.php?page=pos&notice=purchase_failed');
@@ -152,6 +172,28 @@ else if(isset($_POST['request']) && $_POST['request'] == 'purchase')
 else if(isset($_POST['request']) && $_POST['request'] == 'delitem')
 {
     $id= $_POST['id'];
-    delitem($id);
+    $qty = $_POST['quantity'];
+    $pid = $_POST['pid'];
+    delitem($id,$qty,$pid);
+}
+else if(isset($_POST['request']) && $_POST['request'] == 'stockCondition')
+{
+    
+    stocksCondition();
+}
+else if(isset($_POST['request']) && $_POST['request'] == 'notif')
+{
+    
+    getNotification();
+}
+else if(isset($_POST['request']) && $_POST['request'] == 'delnotif')
+{
+    $id = $_POST['id'];
+    delNotification($id);
+}
+else if(isset($_POST['request']) && $_POST['request'] == 'countnotif')
+{
+ 
+    countnotif();
 }
 ?>

@@ -3,19 +3,43 @@ if(!isset($_SESSION['tcode'] ))
 {
 $_SESSION['tcode'] = round(microtime(true));
 }
+checkStock();
 ?>
-       <div class="container" style="width:80%;margin:auto">
+<style>
+table ,tr td{
+    border:1px solid blue
+}
+tbody {
+    display:block;
+    height:250px;
+    overflow:auto;
+}
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;/* even columns width , fix width of table too*/
+}
+thead {
+    width: calc( 100% - 1em )/* scrollbar is average 1em/16px width, remove it from thead width */
+}
+table {
+    width:400px;
+}
+</style>
+       <div class="container" style="width:80%;margin:auto;">
         <input type="hidden" id="tcode" name="transact_code" value="<?= $_SESSION['tcode']?>">
          <div class="form-group">
            
             <div class="row">
                 <div class="col-sm-9">
-                    <label for="exampleInputPassword1">Serial number:</label>
-                    <input type="text" class="form-control" name="serial" id="serial" placeholder="Enter Serial number" autocomplete="off"  require>
+                    <label for="exampleInputPassword1">Product number:</label>
+                    <input type="text" class="form-control" maxlength="10" name="serial" id="serial" placeholder="Enter product number" autocomplete="off"  require>
                 </div>
                 <div class="col-sm-3">
                     <label for="exampleInputPassword1">Quantity:</label>
-                    <input type="number" class="form-control" name="qty" value="1" id="qty" placeholder="Enter Serial number" autocomplete="off"  require>
+                    <input type="number" class="form-control" maxlength="2"oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+    type = "number"
+    maxlength = "2" name="qty" value="1" id="qty" placeholder="Enter Serial number" autocomplete="off"  require>
                 </div>
             </div>
             
@@ -30,9 +54,11 @@ $_SESSION['tcode'] = round(microtime(true));
                 <th>price</th>
                 <th>Total</th>
             </thead>
-            <tbody id="carttb">
+           
+                <tbody id="carttb">
                 
             </tbody>
+           
         </table>
         <hr>
         <button type="submit" data-toggle="modal" data-target="#addcredit" class="btn  btn-success">Finalize Purchases</button>
@@ -53,13 +79,13 @@ $_SESSION['tcode'] = round(microtime(true));
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-4 col-form-label">Customer Fullname:</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" value="" name="fname"  required>
+                    <input type="text" maxlength="30" class="form-control" value="" name="fname"  required>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-4 col-form-label">Mobile number:</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" value="" name="mobile"  required>
+                    <input type="text" class="form-control" maxlength="11" value="" name="mobile"  required>
                 </div>
             </div>
             
@@ -89,11 +115,10 @@ $(document).ready(function(){
             $('#serial').val('');
                 getCart($('#tcode').val());
             }
-        });
+        }); // eto po ung error
         
 });
-$('#serial').keyup(function(e){
-    if(e.keyCode == 13)
+$('#serial').keyup(function(e){    if(e.keyCode == 13)
     {
         $(this).trigger("enterKey");
     }
@@ -114,13 +139,13 @@ $('#serial').keyup(function(e){
             });
         }
         
-        function delCart(e)
+        function delCart(e,q,pid)
         {
               $.ajax({
             
             url:"brain/controller.php",
             method:"POST",
-            data:{request:"delitem",id:e},
+            data:{request:"delitem",id:e,quantity:q,pid:pid},
             success: function(data)
             {
            getCart($('#tcode').val());
