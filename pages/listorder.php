@@ -1,4 +1,5 @@
 <div class="breadcrumb">ORDERS</div>
+<div class="table-responsive">
 <table class="table table-striped">
         <thead>
                <th>Order #</th>
@@ -13,3 +14,4 @@
         orderList() ?>
     </tbody>
 </table>
+</div>

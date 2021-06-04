@@ -1,4 +1,5 @@
 <div class="breadcrumb">USERS LIST</div>
+<div class="table-responsive">
 <table class="table table-striped">
         <thead>
             <th>username</th>
@@ -14,3 +15,4 @@
        userList() ?>
     </tbody>
 </table>
+</div>

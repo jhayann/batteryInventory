@@ -1,4 +1,4 @@
-    <div class="container" style="margin:auto;width:60%">
+    <div class="container col col-md-6" style="margin:auto">
     <div class="breadcrumb">PRODUCT ORDER</div>
     <form method="POST" id="registerform" action="brain/controller.php">
        <input type="hidden" value="neworder" name="request" required>

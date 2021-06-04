@@ -4,7 +4,7 @@
 <!-- My Enhancement Stock Level Condition .. -->
 
 
-
+<div class="table-responsive">
 <table class="table table-striped" id="tbproducts">
         <thead>
             <th>Description</th>
@@ -22,7 +22,7 @@
         productList() ?>
     </tbody>
 </table>
-
+</div>
 <script>
 $(document).ready(function(){
         $('#tbproducts').DataTable({

@@ -1,4 +1,5 @@
 <div class="breadcrumb">Transaction History</div>
+<div class="table-responsive">
 <table class="table table-striped" id="transaction">
         <thead>
                <th>Transaction #</th>
@@ -14,6 +15,7 @@
        purchaseList() ?>
     </tbody>
 </table>
+</div>
  
 
 <script>

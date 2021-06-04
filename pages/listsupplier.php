@@ -1,4 +1,5 @@
 <div class="breadcrumb">SUPPLIERS</div>
+<div class="table-responsive">
 <table class="table table-striped">
         <thead>
             <th>Company name</th>
@@ -12,3 +13,5 @@
         supplierList() ?>
     </tbody>
 </table>
+</div>
+

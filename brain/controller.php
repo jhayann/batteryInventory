@@ -10,10 +10,12 @@ if(isset($_POST['request']) && $_POST['request'] == 'login')
         $_SESSION['username'] = $username;
         $alt_key = "@!$#@^#&";
         $_SESSION['token_key'] = md5($alt_key.$password);
+        
         header('location:../dashboard.php');
     } 
     else 
     {
+        
         header('location:../index.php?notice=login_error');
     }
 } 

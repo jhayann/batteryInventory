@@ -1,4 +1,4 @@
- <div class="container" id="form_order" style="margin:auto;width:70%">
+ <div class="container col col-md-6" id="form_order" style="margin:auto">
  <?php
  
          $stmt = $con->prepare("SELECT * FROM orders WHERE id = ?");

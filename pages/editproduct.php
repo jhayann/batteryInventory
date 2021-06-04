@@ -36,7 +36,7 @@ $id = _crypt($id,'d');
         exit;
     }
 ?>
-    <div class="container" style="margin:auto;width:60%">
+    <div class="container col col-md-6" style="margin:auto">
     <div class="nav-container">
   <ol class="breadcrumb">
       <li class="breadcrumb-item">

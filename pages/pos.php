@@ -45,9 +45,10 @@ table {
             
         </div>
         <hr>
-        <table class="table">
+        <div class="table-responsive">
+        <table class="table" style="min-width:1024px">
             <thead>
-               <th>drop</th>
+               <th >drop</th>
                 <th>description</th>
                 <th>serial no.</th>
                 <th>quantity</th>
@@ -60,6 +61,7 @@ table {
             </tbody>
            
         </table>
+        </div>
         <hr>
         <button type="submit" data-toggle="modal" data-target="#addcredit" class="btn  btn-success">Finalize Purchases</button>
     </div>

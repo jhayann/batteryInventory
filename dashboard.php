@@ -244,7 +244,7 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "purchase_failed")
                         {
                        
                         $page = _crypt(urldecode($_GET['page']),'d');
-                       
+                          $page = strtolower($page);
                          $dir = 'pages/'.$page.'.php';
                        
                             if(is_readable($dir)){

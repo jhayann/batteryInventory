@@ -6,12 +6,14 @@ $deviceid = "109805";
 
 function login($username,$password)
 {
-    $stmt = $GLOBALS['con']->prepare("SELECT username,password,role FROM users WHERE username = ? AND password = ? LIMIT 1") OR die ($GLOBALS['con']->error);
+   
+    $stmt = $GLOBALS['con']->prepare("SELECT username,password,role FROM users WHERE username = ? AND password = ? LIMIT 1") OR die ($GLOBALS['con']->connect_error);
     $stmt->bind_param("ss",$username,$password);
     $stmt->execute();
     $res = $stmt->get_result();
     $r = $res->fetch_assoc();
     $count = $res->num_rows;
+
     if($count == 1)
     {
         session_start();
@@ -22,7 +24,8 @@ function login($username,$password)
             $_SESSION['role'] = "staff";
         }
         return true;
-    } else 
+    } 
+    else 
     {
           return false;
     }
@@ -409,7 +412,7 @@ function purchaseItems($cfname,$cmobile,$transact_code)
 }
   function purchaseList() 
   {
-            $stmt = $GLOBALS['con']->prepare("SELECT * FROM purchases") OR die( $GLOBALS['con']->error);
+            $stmt = $GLOBALS['con']->prepare("SELECT * FROM purchases ORDER BY id DESC") OR die( $GLOBALS['con']->error);
             $stmt->execute();
           $result = $stmt->get_result();
       $data = "";
@@ -569,12 +572,12 @@ function checkStock()
 
 function monthSales()
 {
-    $get = $GLOBALS['con']->prepare("select date_format(`batterydb`.`purchases`.`timestamp`,'%M %Y') AS `month`,sum(`batterydb`.`purchases`.`total`) AS `sales` from `batterydb`.`purchases` WHERE month(timestamp) = month(CURRENT_DATE()) group by month(`batterydb`.`purchases`.`timestamp`)");
+    $get = $GLOBALS['con']->prepare("select date_format(`batterydb`.`purchases`.`timestamp`,'%M %Y') AS `month`,sum(`batterydb`.`purchases`.`total`) AS `sales` from `batterydb`.`purchases` WHERE month(timestamp) = month(CURRENT_DATE()) group by month(`batterydb`.`purchases`.`timestamp`)") or die($GLOBALS['con']->error);
     $get->execute();
     $res = $get->get_result();
     $r = $res->fetch_assoc();
-    $sales = $r['sales'];
-    echo $sales;
+    $sales =$r !== null ? $r['sales'] : 0.00;
+    echo number_format($sales,2);
 }
 function addNotif($title, $body, $type)
 {
