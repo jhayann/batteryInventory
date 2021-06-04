@@ -138,7 +138,7 @@ else if(isset($_GET['notice']) && $_GET['notice'] == "purchase_failed")
 
     <nav class="navbar navbar-expand navbar-dark static-top"  style="background-color: darkcyan;">
 
-      <a class="navbar-brand mr-1" href="index.html">A.A.O MARKETING INVENTORY SYSTEM</a>
+      <a class="navbar-brand mr-1" href="/">A.A.O MARKETING INVENTORY SYSTEM</a>
 
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>

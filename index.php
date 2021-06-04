@@ -1,10 +1,17 @@
 <?php
+session_start();
 $display='d-none';
 $notice="";
 if(isset($_GET['notice']) && $_GET['notice'] == "login_error")
 {
     $display='danger';
     $notice="INVALID USERNAME OR PASSWORD";
+}
+$key = $_SESSION['username'];
+$meta = $_SESSION;
+if(isset($_SESSION['username']))
+{
+    header('location:dashboard.php');
 }
 ?>
 <!DOCTYPE html>
@@ -45,7 +52,7 @@ if(isset($_GET['notice']) && $_GET['notice'] == "login_error")
 <body class="fix-header fix-sidebar">
         <!-- End Page wrapper  -->
    
-   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+   <nav class="navbar d-none navbar-expand-md navbar-dark bg-dark fixed-top">
       <a class="navbar-brand" href="#">A.A.O MARKETING INVENTORY SYSTEM</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
