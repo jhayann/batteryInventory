@@ -16,7 +16,7 @@ function login($username,$password)
 
     if($count == 1)
     {
-        session_start();
+        
         if($r['role'] == "1")
         {
             $_SESSION['role'] = "admin"; 
@@ -70,28 +70,37 @@ function deleteProduct($id)
 }
 
 
-function productList()
+function productList($api = false)
 {
        $stmt = $GLOBALS['con']->prepare("SELECT * FROM product");
         $stmt->execute();
         $result = $stmt->get_result();
-      $data = "";
-        while($r=$result->fetch_assoc())
-        {
-            $data .= '
-                    <tr>
-                        <td>'.xssafe($r['description']).'</td>
-                        <td>'.xssafe($r['brand']).'</td>
-                         <td>'.xssafe($r['serial']).'</td>
-                        <td>'.xssafe($r['size']).'</td>
-                        <td>'.xssafe($r['voltage']).'</td>
-                        <td>'.xssafe($r['quantity']).'</td>
-                        <td>'.xssafe($r['price']).'</td>
-                        <td><a href="?page='._crypt("editproduct").'&id='.xssafe(_crypt($r['id'])).'">EDIT </a></td>
-                    </tr>
-            ';  
+        $data = "";
+        if($api == false) {
+            while($r=$result->fetch_assoc())
+            {
+                $data .= '
+                        <tr>
+                            <td>'.xssafe($r['description']).'</td>
+                            <td>'.xssafe($r['brand']).'</td>
+                            <td>'.xssafe($r['serial']).'</td>
+                            <td>'.xssafe($r['size']).'</td>
+                            <td>'.xssafe($r['voltage']).'</td>
+                            <td>'.xssafe($r['quantity']).'</td>
+                            <td>'.xssafe($r['price']).'</td>
+                            <td><a href="?page='._crypt("editproduct").'&id='.xssafe(_crypt($r['id'])).'">EDIT </a></td>
+                        </tr>
+                ';  
+            }
+            echo $data;
+        } else {
+            $data =[];
+            while($r = $result->fetch_assoc()){
+                $data[] = $r;
+            }
+            
+            return $data;
         }
-    echo $data;
 }
 
 function addSupplier($name,$address,$brand)
